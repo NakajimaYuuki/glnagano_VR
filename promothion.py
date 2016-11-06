@@ -167,7 +167,7 @@ pigon_board.billboard(viz.BILLBOARD_YAXIS)
 pigon_board.visible(False)
 
 # ペッパーの紹介
-pepper_sound = viz.addAudio('resource/welcome.mp3') 
+pepper_sound = viz.addAudio('resource/sound/welcome.mp3') 
 
 # センサーが検知した時
 def EnterProximity(e):
