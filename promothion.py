@@ -16,8 +16,16 @@ viz.fov(60)
 viz.go()
 #　viz.go(viz.FULLSCREEN)
 
+#　設定ファイルは外出ししたい
+#　日本語が出ない
+#　ペッパーの声
+#　ペッパーの動画
+#　バリスタ、コーヒー
+#　イベント情報
+#　OP要素　　→できた
 
 # Key commands
+'''
 KEYS = { 'forward'	: viz.KEY_UP
 		,'back' 	: viz.KEY_DOWN
 		,'left' 	: viz.KEY_LEFT
@@ -30,7 +38,6 @@ KEYS = { 'forward'	: viz.KEY_UP
 # oculus の設定
 hmd = oculus.Rift()
 if hmd.getSensor():
-	# Check if HMD supports position tracking
 	supportPositionTracking = hmd.getSensor().getSrcMask() & viz.LINK_POS
 	if supportPositionTracking:
 		# Add camera bounds model
@@ -76,6 +83,7 @@ else: # 繋がってないとき
 	tracker.setPosition([0,1.8,0])
 	viz.link(tracker,viz.MainView)
 	viz.mouse.setVisible(True)
+'''
 
 # あたり判定
 #Create proximity manager
@@ -93,6 +101,7 @@ lab.enable(viz.LIGHTING) #　これをすると部屋が暗くなる(ライト�
 # マウスの設定
 viz.mouse.setTrap(True)  #アプリ内でしか動けなくなる
 viz.mouse.setCursor(True) # カーソルが見えるかどうか
+viz.mouse.setOverride(viz.ON) 
 
 # 鳩のロゴ
 pigion_proj = vizfx.addProjector(texture=viz.addTexture('resource/pigion.jpg'), pos=(-3,4.0, 5.0), blend=vizfx.BLEND_AVERAGE)
@@ -119,8 +128,8 @@ manager.addSensor(projector_sensor)
 
 
 # ペッパー
-peppar = viz.addTexQuad( )
-peppar_texture = viz.addTexture('resource/pepper.jpg', pos= [2, 1, 6])
+peppar = viz.addTexQuad(pos= [4, 1, -3])
+peppar_texture = viz.addTexture('resource/pepper.jpg')
 peppar.texture(peppar_texture)
 peppar.billboard(viz.BILLBOARD_YAXIS)
 peppar_sensor = vizproximity.Sensor( vizproximity.CircleArea(3),source=peppar)
@@ -139,10 +148,14 @@ text3D = viz.addText3D('welcome to geeklab NAGANO',
                        color=viz.YELLOW,
                        scale=[0.1, 0.05, 0.1],
                        font='Comic Sans MS')
-text3D.addAction(vizact.moveTo([0,2.0 ,2],speed=0.1))
-text3D.addAction(vizact.fadeTo(0,time=2))
+
+text3D.add(vizact.sequence(vizact.moveTo((0,2.0 ,2),speed=0.1),vizact.moveTo((0,2.3 ,2),speed=0.1),viz.FOREVER))
 
 
+# 取得元のURL http://dova-s.jp/bgm/play3394.html
+sound = viz.addAudio('sound/基地出撃５分前.mp3', viz.LOOP) 
+sound.volume(.2) 
+sound.play() 
 #ギークラボ長野紹介プレゼン資料表示
 def NextMovieFrame():
     screen.texture(movieImages.next())
@@ -167,7 +180,7 @@ pigon_board.billboard(viz.BILLBOARD_YAXIS)
 pigon_board.visible(False)
 
 # ペッパーの紹介
-pepper_sound = viz.addAudio('resource/sound/welcome.mp3') 
+pepper_sound = viz.addAudio('sound/welcome.mp3') 
 
 # センサーが検知した時
 def EnterProximity(e):
