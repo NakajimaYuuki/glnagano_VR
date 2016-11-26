@@ -18,7 +18,7 @@ import oculus
 import vizconnect
 import vizproximity
 viz.go()
-
+view = viz.MainView
 
 KEYS = { 'forward'	: viz.KEY_UP
 		,'back' 	: viz.KEY_DOWN
@@ -50,18 +50,21 @@ if hmd.getSensor():
 	viewLink = viz.link(navigationNode, viz.MainView)
 	viewLink.preMultLinkable(hmd.getSensor())
 
-	profile = hmd.getProfile()
-	if profile:
-		viewLink.setOffset([0,profile.eyeHeight,0])
-	else:
-		viewLink.setOffset([0,1.8,0])
+	# オキュラスの高さはみない	
+	# profile = hmd.getProfile()
+	# if profile:
+	#     viewLink.setOffset([0,profile.eyeHeight,0])
+	# else:
+	#     viewLink.setOffset([0,1.8,0])
+	viewLink.setOffset([0,1.8,0])
 
-	# Setup arrow key navigation
+	#　角度の変更
 	MOVE_SPEED = 2.0
 	def UpdateView():
 		yaw,pitch,roll = viewLink.getEuler()
 		m = viz.Matrix.euler(yaw,0,0)
 		dm = viz.getFrameElapsed() * MOVE_SPEED
+		high = viz.getFrameElapsed() * MOVE_SPEED
 		if viz.key.isDown(KEYS['forward']):
 			m.preTrans([0,0,dm])
 		if viz.key.isDown(KEYS['back']):
@@ -70,6 +73,7 @@ if hmd.getSensor():
 			m.preTrans([-dm,0,0])
 		if viz.key.isDown(KEYS['right']):
 			m.preTrans([dm,0,0])
+
 		navigationNode.setPosition(m.getPosition(), viz.REL_PARENT)
 	vizact.ontimer(0,UpdateView)
 else: # 繋がってないとき
@@ -77,8 +81,6 @@ else: # 繋がってないとき
 	tracker.setPosition([0,1.8,0])
 	viz.link(tracker,viz.MainView)
 	viz.mouse.setVisible(True)
-
-
 
 # grid　表示
 grid = vizshape.addGrid()
@@ -89,7 +91,7 @@ viz.mouse.setTrap(True)  #アプリ内でしか動けなくなる
 viz.mouse.setVisible(False)
 viz.mouse.setOverride(viz.ON) 
 
-text3D = viz.addText3D(u'エンターキーを押して', 
+text3D = viz.addText3D(u'Press Enter Key', 
                        pos=[0,2.2,2],
                        align=viz.ALIGN_CENTER_BOTTOM,
                        color=viz.WHITE,
@@ -108,11 +110,12 @@ def myTask():
 	yield text3D.disable(True)
 	yield grid.addAction(fadeout)
 	yield viztask.waitTime( 3 )
-	# ここでGLNAGANOのロゴ表示をしたい
+	# ここでGLNAGANOのロゴ表示
 	import opning
 	yield opning.Logo()
 	yield viztask.waitTime( 10 )
 	import promothion
+
 	promothion
 	
 
@@ -123,3 +126,4 @@ def mykeyboard(whichKey):
 		viztask.schedule( myTask() )
 
 viz.callback(viz.KEYDOWN_EVENT, mykeyboard)
+

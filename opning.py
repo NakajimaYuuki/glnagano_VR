@@ -12,9 +12,7 @@ import vizshape
 import vizact
 import viztask
 import time
-
-
-viz.go()
+# viz.go()
 
 # 文字の表示
 text3D_G = viz.addText3D('G', pos=[-0.2, 1.76, 2],align=viz.ALIGN_CENTER_BOTTOM,color=viz.WHITE,scale=[0.8, 0.9, 1],font='Times New Roman')
@@ -35,8 +33,7 @@ quad.alpha(0)
 
 def Logo():
 	'''ロゴの表示'''	
-	viztask.schedule( logo_start() )
-
+	viztask.schedule(logo_start())
 	
 def logo_start():
 	sound = viz.addAudio('sound/Omega-FlyHyperspace.wav') 
@@ -51,7 +48,7 @@ def logo_start():
 	text3D_nagnao.addAction(fadeout)
 	
 	quad.addAction(fadein)
-	yield viztask.waitTime(0.4)
+	yield viztask.waitTime(0.1)
 	yield quad.addAction(fadeout)
 
 Logo()
