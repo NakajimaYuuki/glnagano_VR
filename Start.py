@@ -33,31 +33,17 @@ KEYS = { 'forward'	: viz.KEY_UP
 hmd = oculus.Rift()
 if hmd.getSensor():
 	supportPositionTracking = hmd.getSensor().getSrcMask() & viz.LINK_POS
-	if supportPositionTracking:
-		# Add camera bounds model
-		camera_bounds = hmd.addCameraBounds()
-		camera_bounds.visible(False)
-
-		# Change color of bounds to reflect whether position was tracked
-		def CheckPositionTracked():
-			if hmd.getSensor().getStatus() & oculus.STATUS_POSITION_TRACKED:
-				camera_bounds.color(viz.GREEN)
-			else:
-				camera_bounds.color(viz.RED)
-		vizact.onupdate(0, CheckPositionTracked)
-
 	navigationNode = viz.addGroup()
 	viewLink = viz.link(navigationNode, viz.MainView)
 	viewLink.preMultLinkable(hmd.getSensor())
 
-	# オキュラスの高さはみない	
-	# profile = hmd.getProfile()
-	# if profile:
-	#     viewLink.setOffset([0,profile.eyeHeight,0])
-	# else:
-	#     viewLink.setOffset([0,1.8,0])
-	viewLink.setOffset([0,1.8,0])
-
+	# オキュラスの高さ	
+	profile = hmd.getProfile()
+	if profile:
+	    viewLink.setOffset([0,profile.eyeHeight,0])
+	else:
+	    viewLink.setOffset([0,1.8,0])
+	
 	#　角度の変更
 	MOVE_SPEED = 2.0
 	def UpdateView():
@@ -77,7 +63,7 @@ if hmd.getSensor():
 		navigationNode.setPosition(m.getPosition(), viz.REL_PARENT)
 	vizact.ontimer(0,UpdateView)
 else: # 繋がってないとき
-	tracker = vizcam.addWalkNavigate(moveScale=2.0)
+	tracker = vizcam.addWalkNavigate(moveScale=1.0)
 	tracker.setPosition([0,1.8,0])
 	viz.link(tracker,viz.MainView)
 	viz.mouse.setVisible(True)

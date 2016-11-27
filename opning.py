@@ -20,16 +20,13 @@ text3D_L = viz.addText3D('L', pos=[0.24, 1.76, 2],align=viz.ALIGN_CENTER_BOTTOM,
 text3D_GL = viz.addText3D('GEEKLAB', pos=[0.0, 1.48, 2],align=viz.ALIGN_CENTER_BOTTOM,color=viz.WHITE,scale=[0.18, 0.2, 1],font='Times New Roman')
 text3D_nagnao = viz.addText3D('NAGANO', pos=[0.00, 1.19, 2],align=viz.ALIGN_CENTER_BOTTOM,color=viz.WHITE, scale=[0.17, 0.2, 1],font='Times New Roman')
 
-
 # 画像の表示
-# Load texture 
 pic = viz.addTexture('resource/logo.png') 
 quad = viz.addTexQuad() 
 quad.setSize([500*0.002, 688*0.002])
 quad.setPosition([0, 1.8, 1.98]) #put quad in view 
 quad.texture(pic)
 quad.alpha(0)
-
 
 def Logo():
 	'''ロゴの表示'''	

@@ -14,18 +14,14 @@ import vizhtml
 
 viz.setMultiSample(4)
 viz.fov(60)
-#viz.MainView.collision( viz.ON )
+# viz.MainView.collision( viz.ON ) # 衝突判定があると動けなくなる場所が多いのでなし
 viz.go()
 #　viz.go(viz.FULLSCREEN)
 
-tracker = vizcam.addWalkNavigate(moveScale=1.0)
-tracker.setPosition([0,1.8,0])
-viz.link(tracker,viz.MainView)
-viz.mouse.setVisible(True)
-
-
-
-#　設定ファイルは外出ししたい
+# tracker = vizcam.addWalkNavigate(moveScale=1.0)
+# tracker.setPosition([0,1.8,0])
+# viz.link(tracker,viz.MainView)
+# viz.mouse.setVisible(True)
 
 # あたり判定をセット
 manager = vizproximity.Manager()
@@ -61,7 +57,6 @@ pigon_texture = viz.addTexture('resource/pigon_descrption.JPG')
 pigon_board.texture(pigon_texture)
 pigon_board.billboard(viz.BILLBOARD_YAXIS)
 pigon_board.visible(False)
-
 
 # プロジェクターの表示
 projector = viz.add('resource/Electronics_Overhead-Projector.osgb', pos=[0.7, 1.2, 5.4], euler=(180, 0, 0))
@@ -112,8 +107,8 @@ famicon =  viz.add('resource/Famicom.osgb', pos=[6.05, 1.4, 3.65], euler=(-90, 0
 famicon_sensor = vizproximity.Sensor( vizproximity.CircleArea(1.5),source=famicon)
 manager.addSensor(famicon_sensor)
 mario = viz.add('resource/NES+mario.osgb', pos=[5.9, 1.6, 3.9], scale=(0.007, 0.007, 0.007), euler=(-90,0,0), alpha=(0))
-mario_bgm = famicon.playsound('sound/mario1.mid', viz.LOOP)
-mario_bgm.volume(1)
+mario_bgm = viz.addAudio('sound/スーパーマリオブラザーズ　地上BGM.wav', viz.LOOP, volume=0.1) 
+
 
 # ギーラボの紹介プレゼン、画像の用意
 movieImages = viz.cycle( [ viz.addTexture('resource/introduction/glnagano%d.jpeg' % i) for i in range(1, 39) ] )
@@ -133,9 +128,9 @@ text3D.add(vizact.sequence(vizact.moveTo((0,2.0 ,2),speed=0.1),vizact.moveTo((0,
 
 
 # 取得元のURL http://dova-s.jp/bgm/play3394.html
-# sound = viz.addAudio('sound/基地出撃５分前.mp3', viz.LOOP, volume=0.1) 
-# sound.volume(.1) 
-# sound.play() 
+sound = viz.addAudio('sound/基地出撃５分前.mp3', viz.LOOP, volume=0.1) 
+sound.volume(.1) 
+sound.play() 
 
 # ギークラボ長野紹介プレゼン資料表示
 def NextMovieFrame():
@@ -157,6 +152,7 @@ def enter_proximity(e):
 		cup.alpha(1)
 	if e.sensor == famicon_sensor:
 		mario.alpha(1)
+		mario_bgm.play()
 # センサーから出たとき
 def exit_proximity(e):
 	if e.sensor == projector_sensor:
@@ -170,6 +166,7 @@ def exit_proximity(e):
 		cup.alpha(0)
 	if e.sensor == famicon_sensor:
 		mario.alpha(0)
+		mario_bgm.stop()
 
 manager.onEnter(None,enter_proximity) #センサーに入った時
 manager.onExit(None,exit_proximity)   #センサーから出たとき
